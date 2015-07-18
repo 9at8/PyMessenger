@@ -1,4 +1,5 @@
 __author__ = 'Aditya Thakral'
+from socket import *
 
 
 def validateip():
@@ -28,3 +29,8 @@ def port():
         port()
     else:
         return p
+
+
+def ownip():
+    ipadd = gethostbyname(gethostname())
+    return ipadd
