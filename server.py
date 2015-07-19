@@ -5,12 +5,11 @@ import common
 import time
 
 s = socket(AF_INET, SOCK_STREAM)
-print common.ownip()
+print 'Connect to this IP Address:', common.ownip()
 s.bind((common.ownip(), common.port()))
 s.listen(5)
 print 'Server started.'
 c, a = s.accept()
-print 'ok'
 while True:
     data = c.recv(10000)
     if data:
