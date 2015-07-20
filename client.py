@@ -37,6 +37,8 @@ while True:
             print i
             time.sleep(1)
         break
+    elif say == len(say) * ' ':
+        continue
     else:
         s.send(user + ' : ' + say)
         try:
