@@ -1,8 +1,6 @@
 __author__ = 'Aditya Thakral'
 from socket import *
 
-__login = []
-
 
 def validateip():
     ipadd = raw_input('Enter the IPv4 address of the computer you want to connect to: ')
@@ -49,13 +47,56 @@ def port():
 
 
 def ownip():
-    return gethostbyname(gethostname())
+    # return gethostbyname(gethostname())
+    return [l for l in ([ip for ip in gethostbyname_ex(gethostname())[2] if not ip.startswith("127.")][:1], [
+        [(s.connect(('8.8.8.8', 80)), s.getsockname()[0], s.close()) for s in [socket(AF_INET, SOCK_DGRAM)]][0][1]]) if
+            l][0][0]
 
 
 def login():
-    if __login == []:
-        user = raw_input('Enter Username: ')
-        password = raw_input('Enter Password: ')
-        __login.append(user)
-        __login.append(password)
+    while True:
+        u = raw_input('Enter username: ')
+        if u == '':
+            login()
+        elif len(u) < 4:
+            print 'Username must be at least 4 characters long.\nTry Again.\n'
+            login()
+        elif len(u) > 20:
+            print 'Username can have a maximum length of 20 characters.\nTryAgain.\n'
+            login()
+        p = raw_input('Enter password: ')
+        try:
+            import mysql.connector
 
+            cnx = mysql.connector.connect(user='root', password='9at8_thakral', database='PyMessenger', host='volumio')
+            q = 'select password from login where user = ' + '\'' + u + '\'' + ';'
+            cursor = cnx.cursor()
+            cursor.execute(q)
+            for pswd in cursor:
+                pass
+            if p == pswd[0]:
+                return (True, u)
+            else:
+                print 'Wrong Password!\n'
+        except ImportError:
+            return (False,)
+        except NameError:
+            print '\'' + u + '\'', 'does not exist. You need to sign-up.'
+            print 'Signing up is currently not implemented.\n'
+
+
+def signup():
+    while True:
+        import mysql.connector
+
+        user = raw_input('Please input a username: ')
+        if user == '':
+            signup()
+        elif len(user) < 4:
+            print 'Username must be at least 4 characters long.\nTry Again.\n'
+            signup()
+        elif len(user) > 20:
+            print 'Username can have a maximum length of 20 characters.\nTry Again.\n'
+            signup()
+        cnx = mysql.connector.connect(user='root', password='9at8_thakral', database='PyMessenger', host='volumio')
+        q = ''
